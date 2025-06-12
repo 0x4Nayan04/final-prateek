@@ -29,8 +29,8 @@ export default defineType({
       name: 'summary',
       title: 'Short Summary',
       type: 'text',
-      description: 'Brief description for cards and SEO (2-3 sentences)',
-      validation: (Rule) => Rule.required().min(50).max(300),
+      description: 'Brief description of the case study',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'thumbnail',
