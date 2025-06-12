@@ -1,95 +1,171 @@
 // /schemas/caseStudy.ts
 
-import { defineField, defineType } from "sanity";
+import {defineField, defineType} from 'sanity'
 
 export default defineType({
-  name: "caseStudy",
-  title: "Case Study",
-  type: "document",
+  name: 'caseStudy',
+  title: 'Case Study',
+  type: 'document',
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
-      type: "string",
-      validation: Rule => Rule.required(),
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      description: 'The main title of the case study',
+      validation: (Rule) => Rule.required().min(10).max(100),
     }),
     defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'URL-friendly version of the title',
       options: {
-        source: "title",
+        source: 'title',
         maxLength: 96,
       },
-      validation: Rule => Rule.required(),
-    }),
-    defineField({
-      name: "summary",
-      title: "Short Summary",
-      type: "blockContent",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "thumbnail",
-      title: "Thumbnail Image",
-      type: "image",
-      options: { hotspot: true },
-      validation: Rule => Rule.required(),
+      name: 'summary',
+      title: 'Short Summary',
+      type: 'text',
+      description: 'Brief description for cards and SEO (2-3 sentences)',
+      validation: (Rule) => Rule.required().min(50).max(300),
     }),
     defineField({
-      name: "images",
-      title: "Gallery Images",
-      type: "array",
-      of: [{ type: "image", options: { hotspot: true } }],
+      name: 'thumbnail',
+      title: 'Thumbnail Image',
+      type: 'image',
+      description: 'Main image shown on case study cards and headers',
+      options: {hotspot: true},
+      validation: (Rule) => Rule.required(),
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alt text',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
     }),
     defineField({
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [{ type: "string" }],
+      name: 'images',
+      title: 'Gallery Images',
+      type: 'array',
+      description: 'Additional images for the case study',
+      of: [
+        {
+          type: 'image',
+          options: {hotspot: true},
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alt text',
+              validation: (Rule) => Rule.required(),
+            },
+          ],
+        },
+      ],
     }),
     defineField({
-      name: "priority",
-      title: "Priority (Lower number = higher)",
-      type: "number",
-    }),
-    defineField({
-      name: "clientOverview",
-      title: "Client Overview",
-      type: "blockContent",
-    }),
-    defineField({
-      name: "problem",
-      title: "Problem",
-      type: "blockContent",
-    }),
-    defineField({
-      name: "approach",
-      title: "Approach",
-      type: "blockContent",
-    }),
-    defineField({
-      name: "solution",
-      title: "Solution",
-      type: "blockContent",
-    }),
-    defineField({
-      name: "result",
-      title: "Result",
-      type: "blockContent",
-    }),
-    defineField({
-      name: "iframePreview",
-      title: "iFrame Embed URL (optional)",
-      type: "url",
-    }),
-    defineField({
-      name: "pdfFile",
-      title: "PDF File (for preview)",
-      type: "file",
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      description: 'Technologies, tools, and categories (e.g., Power BI, Analytics, SQL)',
+      of: [{type: 'string'}],
       options: {
-        accept: ".pdf",
+        layout: 'tags',
+      },
+      validation: (Rule) => Rule.max(8),
+    }),
+    defineField({
+      name: 'priority',
+      title: 'Priority (Lower number = higher priority)',
+      type: 'number',
+      description: 'Used for sorting case studies on the homepage (1 = highest priority)',
+      validation: (Rule) => Rule.min(1).max(100),
+      initialValue: 50,
+    }),
+    defineField({
+      name: 'clientOverview',
+      title: 'Client Overview',
+      type: 'blockContent',
+      description: 'Background information about the client and their business',
+    }),
+    defineField({
+      name: 'problem',
+      title: 'Problem',
+      type: 'blockContent',
+      description: 'What challenges or problems needed to be solved',
+    }),
+    defineField({
+      name: 'approach',
+      title: 'Approach',
+      type: 'blockContent',
+      description: 'Your methodology and strategy for solving the problem',
+    }),
+    defineField({
+      name: 'solution',
+      title: 'Solution',
+      type: 'blockContent',
+      description: 'The technical solution and implementation details',
+    }),
+    defineField({
+      name: 'result',
+      title: 'Result & Impact',
+      type: 'blockContent',
+      description: 'Outcomes, metrics, and business impact achieved',
+    }),
+    defineField({
+      name: 'iframePreview',
+      title: 'Dashboard/Report Embed URL',
+      type: 'url',
+      description: 'URL for embedding Power BI, Tableau, or other interactive dashboards',
+    }),
+    defineField({
+      name: 'pdfFile',
+      title: 'Downloadable Report (PDF)',
+      type: 'file',
+      description: 'PDF report or documentation for download',
+      options: {
+        accept: '.pdf',
       },
     }),
+    defineField({
+      name: 'externalLinks',
+      title: 'External Links',
+      type: 'array',
+      description: 'Links to live dashboards, reports, or related resources',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {name: 'title', type: 'string', title: 'Link Title'},
+            {name: 'url', type: 'url', title: 'URL'},
+            {name: 'description', type: 'string', title: 'Description'},
+          ],
+        },
+      ],
+    }),
   ],
-});
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'summary',
+      media: 'thumbnail',
+    },
+  },
+  orderings: [
+    {
+      title: 'Priority (Highest First)',
+      name: 'priorityDesc',
+      by: [{field: 'priority', direction: 'asc'}],
+    },
+    {
+      title: 'Title A-Z',
+      name: 'titleAsc',
+      by: [{field: 'title', direction: 'asc'}],
+    },
+  ],
+})

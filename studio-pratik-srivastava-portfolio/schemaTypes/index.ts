@@ -1,6 +1,6 @@
 // /schemas/index.ts
 
-import blockContent from "./blockContent";
-import caseStudy from "./caseStudy";
+import blockContent from './blockContent'
+import caseStudy from './caseStudy'
 
-export const schemaTypes = [blockContent, caseStudy];
+export const schemaTypes = [blockContent, caseStudy]
