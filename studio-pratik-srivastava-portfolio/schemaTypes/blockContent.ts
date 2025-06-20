@@ -263,14 +263,14 @@ export default defineType({
           name: 'showPreview',
           type: 'boolean',
           title: 'Show Preview?',
-          description: 'Display PDF in an embedded viewer',
+          description: 'Display PDF in an embedded viewer for preview',
           initialValue: true,
         },
         {
           name: 'downloadText',
           type: 'string',
-          title: 'Download Button Text',
-          initialValue: 'Download PDF',
+          title: 'Preview Button Text',
+          initialValue: 'Preview PDF',
         },
       ],
       preview: {

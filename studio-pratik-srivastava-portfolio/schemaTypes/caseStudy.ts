@@ -69,22 +69,39 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'tags',
-      title: 'Tags',
+      name: 'techStack',
+      title: 'Tech Stack',
       type: 'array',
-      description: 'Technologies, tools, and categories (e.g., Power BI, Analytics, SQL)',
+      description: 'Technologies used (e.g., Power BI, SQL, Python)',
       of: [{type: 'string'}],
       options: {
         layout: 'tags',
       },
-      validation: (Rule) => Rule.max(8),
+      validation: (Rule) => Rule.max(10),
     }),
+
+    defineField({
+      name: 'industry',
+      title: 'Industry',
+      type: 'array',
+      description: 'Relevant industries (e.g., Retail, Fintech, Healthcare)',
+      of: [{type: 'string'}],
+      options: {
+        layout: 'tags',
+      },
+      validation: (Rule) => Rule.max(5),
+    }),
+
     defineField({
       name: 'priority',
       title: 'Priority (Lower number = higher priority)',
       type: 'number',
-      description: 'Used for sorting case studies on the homepage (1 = highest priority)',
-      validation: (Rule) => Rule.min(1).max(100),
+      description: 'Used to sort case studies. Lower = higher priority. Keep it unique manually.',
+      validation: (Rule) =>
+        Rule.required()
+          .min(1)
+          .max(100)
+          .warning('Ensure this number is unique across all case studies.'),
       initialValue: 50,
     }),
     defineField({
@@ -125,9 +142,9 @@ export default defineType({
     }),
     defineField({
       name: 'pdfFile',
-      title: 'Downloadable Report (PDF)',
+      title: 'PDF Report Preview',
       type: 'file',
-      description: 'PDF report or documentation for download',
+      description: 'PDF report or documentation for preview',
       options: {
         accept: '.pdf',
       },
